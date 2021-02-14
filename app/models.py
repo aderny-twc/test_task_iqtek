@@ -21,6 +21,10 @@ class User(db.Model):
         db.session.commit()
         return new_user
 
+    def get_user(_user_id):
+        getting_user = User.query.get_or_404(_user_id)
+        return getting_user
+
 
     def __repr__(self):
         """Отображение пользователя в shell."""
