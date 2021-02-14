@@ -1,0 +1,15 @@
+from flask import Flask
+from flask_sqlalchemy import SQLAlchemy
+import os, config
+
+
+#Создание экземпляра приложения
+app = Flask(__name__)
+#Выбор конфигурации
+app.config.from_object(os.environ.get('FLASK_ENV') or 'config.MysqlDBConfig')
+
+#Инициализация расширений
+db = SQLAlchemy(app)
+
+#Импорт views
+from . import views
