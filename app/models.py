@@ -25,15 +25,20 @@ class User(db.Model):
         return getting_user
 
     def update_user(_user_id, _first_name, _middle_name, _last_name):
+        """Обновляет поля для пользователя с user_id."""
         upd_fields = {'first_name': _first_name,
                         'middle_name': _middle_name,
                         'last_name': _last_name,}
         upd_user = User.query.filter_by(user_id=_user_id).update(upd_fields)
         db.session.commit()
 
+    def delete_user(_user_id):
+        """Удаляет пользователя с указанным user_id."""
+        User.query.filter_by(user_id=_user_id).delete()
+        db.session.commit()
 
     def __repr__(self):
-        """Отображение пользователя в shell."""
+        """Отображение объета user в shell."""
         user_obj = {
                 'user_id': self.user_id,
                 'first_name': self.first_name,
