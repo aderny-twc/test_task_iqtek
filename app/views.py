@@ -39,7 +39,9 @@ def update_user(user_id):
 @app.route('/test/api/v0.1/user/<int:user_id>/', methods=['DELETE'])
 def delete_user(user_id):
     """Удаление объекта пользователя c user_id."""
-    pass
+    User.delete_user(user_id)
+
+    return jsonify({'Response': 'User deleted'})
 
 
 #Возвращение ошибки при отстутствии данных
