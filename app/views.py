@@ -35,7 +35,6 @@ def update_user(user_id):
     return jsonify({'Response': 'User updated'})
 
 
-
 @app.route('/test/api/v0.1/user/<int:user_id>/', methods=['DELETE'])
 def delete_user(user_id):
     """Удаление объекта пользователя c user_id."""
@@ -54,6 +53,12 @@ def not_found(error):
 @app.errorhandler(405)
 def ivalid_mehtod(error):
     return make_response(jsonify({'error': 'Method Not Allowed'}), 405)
+
+
+#Возвращение ошибки отсутсвия данных, неверных полях
+@app.errorhandler(400)
+def bad_request(error):
+    return make_response(jsonify({'error': 'Empty data/invalid fields'}), 400)
 
 
 def input_validation(json_obj):
