@@ -15,19 +15,25 @@ def get_user(user_id):
 @app.route('/test/api/v0.1/user/', methods=['POST'])
 def create_user():
     """Создание нового объекта пользователя."""
-    user_fields = ['first_name', 'middle_name', 'last_name']
-    if input_validation(user_fields, request.json):
+    if input_validation(request.json):
         User.add_user(request.json['first_name'],
                         request.json['middle_name'],
                         request.json['last_name'])
 
-    return jsonify({'response': 'Ok'})
+    return jsonify({'Response': 'User created'})
 
 
 @app.route('/test/api/v0.1/user/<int:user_id>/', methods=['PUT'])
 def update_user(user_id):
     """Обновление объекта пользователя с user_id."""
-    pass
+    if input_validation(request.json):
+        User.update_user(user_id,
+                        request.json['first_name'],
+                        request.json['middle_name'],
+                        request.json['last_name'])
+
+    return jsonify({'Response': 'User updated'})
+
 
 
 @app.route('/test/api/v0.1/user/<int:user_id>/', methods=['DELETE'])
@@ -42,11 +48,12 @@ def not_found(error):
     return make_response(jsonify({'error': 'Not Found'}), 404)
 
 
-def input_validation(fields, json_obj):
+def input_validation(json_obj):
     """
-    Проверка входных данных. Принимает проверяемые поля и объект json.
+    Проверка входных данных. Принимает объект json.
     """
-    for field in fields:
+    user_fields = ['first_name', 'middle_name', 'last_name']
+    for field in user_fields:
         if (field in json_obj
             and isinstance(json_obj[field], str)):
             continue
