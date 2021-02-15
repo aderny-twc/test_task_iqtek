@@ -15,7 +15,7 @@ def get_user(user_id):
 @app.route('/test/api/v0.1/user/', methods=['POST'])
 def create_user():
     """Создание нового объекта пользователя."""
-    if input_validation(request.json):
+    if request.json and input_validation(request.json):
         User.add_user(request.json['first_name'],
                         request.json['middle_name'],
                         request.json['last_name'])
@@ -26,7 +26,7 @@ def create_user():
 @app.route('/test/api/v0.1/user/<int:user_id>/', methods=['PUT'])
 def update_user(user_id):
     """Обновление объекта пользователя с user_id."""
-    if input_validation(request.json):
+    if request.json and input_validation(request.json):
         User.update_user(user_id,
                         request.json['first_name'],
                         request.json['middle_name'],
@@ -48,6 +48,12 @@ def delete_user(user_id):
 @app.errorhandler(404)
 def not_found(error):
     return make_response(jsonify({'error': 'Not Found'}), 404)
+
+
+#Возвращение ошибки недопустимого метода
+@app.errorhandler(405)
+def ivalid_mehtod(error):
+    return make_response(jsonify({'error': 'Method Not Allowed'}), 405)
 
 
 def input_validation(json_obj):
