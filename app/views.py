@@ -1,6 +1,5 @@
 from app import app
 from flask import request, jsonify, make_response
-import json
 
 from .models import User
 
@@ -17,8 +16,8 @@ def create_user():
     """Создание нового объекта пользователя."""
     if input_validation(request.json):
         User.add_user(request.json['first_name'],
-                        request.json['middle_name'],
-                        request.json['last_name'])
+                      request.json['middle_name'],
+                      request.json['last_name'])
 
     resp_body = jsonify({'Response': 'User created'})
     return make_response(resp_body, 201)
@@ -29,9 +28,9 @@ def update_user(user_id):
     """Обновление объекта пользователя с user_id."""
     if input_validation(request.json):
         User.update_user(user_id,
-                        request.json['first_name'],
-                        request.json['middle_name'],
-                        request.json['last_name'])
+                         request.json['first_name'],
+                         request.json['middle_name'],
+                         request.json['last_name'])
 
     resp_body = jsonify({'Response': 'User updated'})
     return make_response(resp_body, 200)
@@ -45,19 +44,19 @@ def delete_user(user_id):
     return jsonify({'Response': 'User deleted'})
 
 
-#Возвращение ошибки при отстутствии данных
+# Возвращение ошибки при отстутствии данных
 @app.errorhandler(404)
 def not_found(error):
     return make_response(jsonify({'error': 'Not Found'}), 404)
 
 
-#Возвращение ошибки недопустимого метода
+# Возвращение ошибки недопустимого метода
 @app.errorhandler(405)
 def ivalid_mehtod(error):
     return make_response(jsonify({'error': 'Method Not Allowed'}), 405)
 
 
-#Возвращение ошибки отсутсвия данных, неверных полях
+# Возвращение ошибки отсутсвия данных, неверных полях
 @app.errorhandler(400)
 def bad_request(error):
     return make_response(jsonify({'error': 'Empty data/invalid fields'}), 400)
@@ -70,10 +69,8 @@ def input_validation(json_obj):
     user_fields = ['first_name', 'middle_name', 'last_name']
     for field in user_fields:
         if (field in json_obj
-            and isinstance(json_obj[field], str)):
+                and isinstance(json_obj[field], str)):
             continue
         else:
             abort(400)
     return True
-
-
