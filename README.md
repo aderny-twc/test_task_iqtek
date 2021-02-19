@@ -44,6 +44,7 @@ user_test_api_iqt/
 ```
 git clone https://github.com/aderny-twc/user_test_api_iqt.git
 cd user_test_api_iqt
+python -m venv venv
 ```
 
 ### Установка зависимостей
