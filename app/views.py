@@ -1,8 +1,9 @@
 from app import app
 from flask import request, jsonify, make_response, abort
+
 from .db.db_teller import DBService
 
-# Инициализация сервиса работы с БД
+# Инициализация сервиса работы с БД - создание объекта класса.
 db_service = DBService(app.config['DEFAULT_DATABASE']).create_db()
 
 
@@ -50,7 +51,7 @@ def delete_user(user_id):
         abort(404)
 
 
-# Возвращение ошибки при отстутствии данных
+# Возвращение ошибки при отстутствии данных в БД
 @app.errorhandler(404)
 def not_found(error):
     return make_response(jsonify({'error': 'Not Found'}), 404)
@@ -62,7 +63,7 @@ def ivalid_mehtod(error):
     return make_response(jsonify({'error': 'Method Not Allowed'}), 405)
 
 
-# Возвращение ошибки отсутсвия данных, неверных полях
+# Возвращение ошибки отсутсвия данных, неверных полях в теле запроса
 @app.errorhandler(400)
 def bad_request(error):
     return make_response(jsonify({'error': 'Empty data/invalid fields'}), 400)
