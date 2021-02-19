@@ -42,7 +42,7 @@ user_test_api_iqt/
 ### Загрузка проекта
 
 ```
-git clone https://github.com/aderny-twc/user_test_api_iqt.git
+git clone -b dep_inj https://github.com/aderny-twc/user_test_api_iqt.git
 cd user_test_api_iqt
 python -m venv venv
 ```
