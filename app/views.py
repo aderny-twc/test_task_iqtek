@@ -1,51 +1,56 @@
 from app import app
 from flask import request, jsonify, make_response, abort
+from flask_injector import FlaskInjector
+from injector import inject
 
 from .db.db_teller import DBService
-
-# Инициализация сервиса работы с БД - создание объекта класса.
-db_service = DBService(app.config['DEFAULT_DATABASE']).create_db()
+from .db.dependencies import configure
 
 
+@inject
 @app.route('/test/api/v0.1/user/<int:user_id>/', methods=['GET'])
-def get_user(user_id):
+def get_user(user_id, service: DBService):
     """Получение объекта пользователя по user_id."""
-    getting_user = db_service.get_user(user_id)
+    print(f"MyService instance is {service}")
+    getting_user = service.get_user(user_id)
     if getting_user:
         return jsonify(getting_user)
     else:
         abort(404)
 
 
+@inject
 @app.route('/test/api/v0.1/user/', methods=['POST'])
-def create_user():
+def create_user(service: DBService):
     """Создание нового объекта пользователя."""
     if input_validation(request.json):
-        db_service.add_user(request.json['first_name'],
-                            request.json['middle_name'],
-                            request.json['last_name'])
+        service.add_user(request.json['first_name'],
+                         request.json['middle_name'],
+                         request.json['last_name'])
 
     resp_body = jsonify({'Response': 'User created'})
     return make_response(resp_body, 201)
 
 
+@inject
 @app.route('/test/api/v0.1/user/<int:user_id>/', methods=['PUT'])
-def update_user(user_id):
+def update_user(user_id, service: DBService):
     """Обновление объекта пользователя с user_id."""
     if input_validation(request.json):
-        db_service.update_user(user_id,
-                               request.json['first_name'],
-                               request.json['middle_name'],
-                               request.json['last_name'])
+        service.update_user(user_id,
+                            request.json['first_name'],
+                            request.json['middle_name'],
+                            request.json['last_name'])
 
     resp_body = jsonify({'Response': 'User updated'})
     return make_response(resp_body, 200)
 
 
+@inject
 @app.route('/test/api/v0.1/user/<int:user_id>/', methods=['DELETE'])
-def delete_user(user_id):
+def delete_user(user_id, service: DBService):
     """Удаление объекта пользователя c user_id."""
-    if db_service.delete_user(user_id):
+    if service.delete_user(user_id):
         return jsonify({'Response': 'User deleted'})
     else:
         abort(404)
@@ -81,3 +86,7 @@ def input_validation(json_obj):
         else:
             abort(400)
     return True
+
+
+# Setup Flask Injector
+FlaskInjector(app=app, modules=[configure])

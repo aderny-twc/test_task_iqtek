@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+from injector import inject
 
 
 class DataBase(ABC):
@@ -25,12 +26,21 @@ class DataBase(ABC):
 
 
 class DBService:
-    """Фабрика объектов реализаций БД."""
-
+    """Сервис общения с БД."""
+    @inject
     def __init__(self, db: DataBase):
         """Определение типа БД."""
         self.db = db
 
-    def create_db(self) -> DataBase:
-        """Возвращает объект БД."""
-        return self.db()
+    def add_user(self, _first_name, _middle_name, _last_name):
+        return self.db.add_user(_first_name, _middle_name, _last_name)
+
+    def get_user(self, user_id):
+        return self.db.get_user(user_id)
+
+    def update_user(self, user_id, _first_name, _middle_name, _last_name):
+        return self.db.update_user(user_id, _first_name, _middle_name, _last_name)
+
+    def delete_user(self, user_id):
+        return self.db.delete_user(user_id)
+

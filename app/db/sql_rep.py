@@ -3,6 +3,7 @@ import psycopg2
 from app.db.db_teller import DataBase
 from app.db.transactioncm import TransactionCtx
 
+
 CONNECT_LINE = 'postgres://testapi:testAPIpasswd@localhost/testapidb'
 
 
